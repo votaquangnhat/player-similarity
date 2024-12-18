@@ -9,7 +9,7 @@ st.write('# Title: Football analysis')
 file_name = "Player_Final.csv"
 file_name = st.selectbox(
     'Select dataset:',
-    ['Player_Final.csv', 'GK_Final'],
+    ['Player_Final.csv', 'GK_Final.csv'],
     placeholder="Select metric...", 
 )
 st.write('Data: ' + file_name)
@@ -34,12 +34,18 @@ st.write('Top 10 teams with the most players:')
 pos_counts = df['current_club_name'].value_counts().head(10)
 fig, ax = plt.subplots()
 pos_counts.plot(kind='bar', ax=ax)
-ax.set_ylim(bottom=25)
+if file_name == 'Player_Final.csv':
+    ax.set_ylim(bottom=25)
 st.pyplot(fig)
 
-st.write(r'Penalty_Success_%:')
-t = df[df['Summary_PKatt'] > 0][['name', 'Summary_PKatt', 'Penalty_Success_%']].sort_values(by='Summary_PKatt', ascending=False)
-t
+if file_name == 'Player_Final.csv':
+    st.write(r'Penalty_Success:')
+    t = df[df['Summary_PKatt'] > 0][['name', 'Summary_PKatt', 'Penalty_Success_%']].sort_values(by='Summary_PKatt', ascending=False)
+    t
+else:
+    st.write(r'Goalkeeping_Saves')
+    t = df[df['Goalkeeping_Saves'] > 0][['name', 'Goalkeeping_Saves', 'Goalkeeping_Save%']].sort_values(by='Goalkeeping_Saves', ascending=False)
+    t
 
 column = st.selectbox('Select a column for distribution:',
                       df.select_dtypes(include='number').columns,

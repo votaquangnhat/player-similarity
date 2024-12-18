@@ -11,7 +11,7 @@ st.write('Selected features for similarity finding: ')
 file_name = "Player_Final.csv"
 file_name = st.selectbox(
     'Select dataset:',
-    ['Player_Final.csv', 'GK_Final'],
+    ['Player_Final.csv', 'GK_Final.csv'],
     placeholder="Select metric...", 
 )
 st.write('Data: ' + file_name)
