@@ -6,7 +6,7 @@ import numpy as np
 
 st.write('# Title: Football analysis')
 
-file_name = "Player_Gr.csv"
+file_name = "Player_Final.csv"
 st.write('Data: ' + file_name)
 df = pd.read_csv(f"data/{file_name}")
 
@@ -26,19 +26,22 @@ pos_counts.plot(kind='bar', ax=ax)
 st.pyplot(fig)
 
 st.write('Top 10 teams with the most players:')
-pos_counts = df['Team Name'].value_counts().head(10)
+pos_counts = df['current_club_name'].value_counts().head(10)
 fig, ax = plt.subplots()
 pos_counts.plot(kind='bar', ax=ax)
-ax.set_ylim(bottom=45)
+ax.set_ylim(bottom=25)
 st.pyplot(fig)
 
 st.write(r'Penalty_Success_%:')
-t = df[df['Summary_PKatt'] > 0][['Player', 'Summary_PKatt', 'Penalty_Success_%']].sort_values(by='Summary_PKatt', ascending=False)
+t = df[df['Summary_PKatt'] > 0][['name', 'Summary_PKatt', 'Penalty_Success_%']].sort_values(by='Summary_PKatt', ascending=False)
 t
 
-column = st.selectbox('Select a column for distribution:', df.select_dtypes(include='number').columns)
+column = st.selectbox('Select a column for distribution:',
+                      df.select_dtypes(include='number').columns,
+                      index=2) # default is Min
 fig, ax = plt.subplots()
 df[column].hist(bins=20, ax=ax)
+ax.set_title('Distribution for ' + column)
 st.pyplot(fig)
 
 st.write(len(df.select_dtypes(include='number').columns))
