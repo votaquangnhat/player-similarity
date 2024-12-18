@@ -30,7 +30,10 @@ exclude_feature = ['player_id', 'name', '#', 'Team Name', 'Nation', 'Summary_Crd
                    'Miscellaneous_Stats_2CrdY', 'Miscellaneous_Stats_Fls', 'Miscellaneous_Stats_Off',
                    'total_games', 'Penalty_Success_%', 'foot', 'image_url', 'height_in_cm',
                    'current_club_domestic_competition_id', 'current_club_name', 'market_value_in_eur', 'Age']
-selected_features = [x for x in features if x not in exclude_feature]
+
+exclude_feature1 = ["Passing_Ast","Defensive_Actions_TklW","Defensive_Actions_Int","Defensive_Actions_dribblers_Tkl","Possession_Att 3rd","Pass_Types_FK","Defensive_Actions_Mid 3rd","Miscellaneous_Stats_Recov","Possession_Live","Pass_Types_Out","Possession_Att Pen","Summary_Touches","Summary_takes_on_Att","Possession_1/3","Possession_Def 3rd","Summary_Carries","Summary_SoT","Summary_PKatt","Pass_Types_In","Pass_Types_Live","Possession_TotDist","Possession_PrgDist","Passing_KP","Passing_xA","Passing_1/3","Age","Possession_Mid 3rd","Possession_Tkld%","Defensive_Actions_Att","Possession_Rec","Passing_medium_Att","Defensive_Actions_Def 3rd","Pass_Types_TI","Summary_pass_Att","Passing_short_Att","Summary_xG","Possession_Def Pen","Passing_PrgDist","Defensive_Actions_Pass","Summary_PrgP"]
+
+selected_features = [x for x in features if (x not in exclude_feature) and ((x not in exclude_feature1))]
 
 selected_features
 

@@ -78,10 +78,29 @@ attribute = st.selectbox('Select an attribute for check correlation:',
 high_corr_pairs = corr.where(np.abs(corr) > threshold).stack().reset_index()
 high_corr_pairs.columns = ['Attribute 1', 'Attribute 2', 'Correlation']
 high_corr_pairs = high_corr_pairs[high_corr_pairs['Attribute 1'] != high_corr_pairs['Attribute 2']]
-st.write("High Correlations (correlation > threshold):")
+st.write("High Correlations (|correlation| > threshold):")
 high_corr_pairs[high_corr_pairs['Attribute 1']==attribute]
+high_corr_pairs
 
+st.write('Drop columns that have high correlation with another columns')
 
+dropped_columns_set = set()
+
+for _, row in high_corr_pairs.iterrows():
+    attr1, attr2, corr = row["Attribute 1"], row["Attribute 2"], row["Correlation"]
+    if attr1 not in dropped_columns_set and attr2 not in dropped_columns_set:
+        dropped_columns_set.add(attr2)
+
+dropped_columns = list(dropped_columns_set)
+dropped_columns
+# #####
+# selected_columns = df.select_dtypes(include=['number']).columns.to_list()
+# t = df[selected_columns].drop(columns=dropped_columns)
+# corr = t.corr()
+# high_corr_pairs = corr.where(np.abs(corr) > threshold).stack().reset_index()
+# high_corr_pairs.columns = ['Attribute 1', 'Attribute 2', 'Correlation']
+# high_corr_pairs = high_corr_pairs[high_corr_pairs['Attribute 1'] != high_corr_pairs['Attribute 2']]
+# high_corr_pairs
 
 
 selected_columns_pp = st.multiselect("Select columns to pairplot:",
