@@ -8,7 +8,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 st.write('Selected features for similarity finding: ')
 
-df = pd.read_csv(r"data/Player_Final.csv")
+file_name = "Player_Final.csv"
+file_name = st.selectbox(
+    'Select dataset:',
+    ['Player_Final.csv', 'GK_Final'],
+    placeholder="Select metric...", 
+)
+st.write('Data: ' + file_name)
+df = pd.read_csv(f"data/{file_name}")
 
 features = df.columns.tolist()
 exclude_feature = ['player_id', 'name', '#', 'Team Name', 'Nation', 'Summary_CrdY', 'Summary_CrdR', 'Pos',

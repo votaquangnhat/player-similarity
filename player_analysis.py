@@ -7,7 +7,14 @@ import numpy as np
 import plotly.graph_objects as go
 
 
-df = pd.read_csv(r"data/Player_Final.csv")
+file_name = "Player_Final.csv"
+file_name = st.selectbox(
+    'Select dataset:',
+    ['Player_Final.csv', 'GK_Final'],
+    placeholder="Select metric...", 
+)
+st.write('Data: ' + file_name)
+df = pd.read_csv(f"data/{file_name}")
 
 st.write('## 1. Player statistic')
 

@@ -14,7 +14,14 @@ st.write('## 1. Some clustering algorithms')
 
 st.write('Selected features for clustering: ')
 
-df = pd.read_csv(r"data/Player_Final.csv")
+file_name = "Player_Final.csv"
+file_name = st.selectbox(
+    'Select dataset:',
+    ['Player_Final.csv', 'GK_Final'],
+    placeholder="Select metric...", 
+)
+st.write('Data: ' + file_name)
+df = pd.read_csv(f"data/{file_name}")
 
 df = df[df['Min'] >=5]
 
