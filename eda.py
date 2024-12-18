@@ -55,19 +55,29 @@ selected_columns = st.multiselect("Select columns to compute correlation:",
 
 if selected_columns:
     corr = df[selected_columns].corr()
-    fig, ax = plt.subplots(figsize=(12, 10))  # Adjust size as needed
-    sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", ax=ax)
+    fig, ax = plt.subplots(figsize=(12, 10))
+    mask = np.triu(np.ones_like(corr, dtype=bool))
+    sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", ax=ax, mask=mask)
     ax.set_title("Correlation Heatmap of selected columns", fontsize=16)
     st.pyplot(fig)
 
-    threshold = st.number_input(
-    "Insert a number", value=0.8, placeholder="Enter the threshold...")
-    st.write("The current threshold is ", threshold)
-    high_corr_pairs = corr.where(np.abs(corr) > threshold).stack().reset_index()
-    high_corr_pairs.columns = ['Attribute 1', 'Attribute 2', 'Correlation']
-    high_corr_pairs = high_corr_pairs[high_corr_pairs['Attribute 1'] != high_corr_pairs['Attribute 2']]
-    st.write("High Correlations (correlation > threshold):")
-    high_corr_pairs
+
+selected_columns = df.select_dtypes(include=['number']).columns.to_list()
+corr = df[selected_columns].corr()
+threshold = st.number_input(
+"Insert a number", value=0.8, placeholder="Enter the threshold...")
+st.write("The current threshold is ", threshold)
+attribute = st.selectbox('Select an attribute for check correlation:',
+                      df.select_dtypes(include='number').columns,
+                      index=2)
+high_corr_pairs = corr.where(np.abs(corr) > threshold).stack().reset_index()
+high_corr_pairs.columns = ['Attribute 1', 'Attribute 2', 'Correlation']
+high_corr_pairs = high_corr_pairs[high_corr_pairs['Attribute 1'] != high_corr_pairs['Attribute 2']]
+st.write("High Correlations (correlation > threshold):")
+high_corr_pairs[high_corr_pairs['Attribute 1']==attribute]
+
+
+
 
 selected_columns_pp = st.multiselect("Select columns to pairplot:",
                                   df.select_dtypes(include=['number']).columns.to_list(),
