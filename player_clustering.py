@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans, DBSCAN
-from scipy.cluster.hierarchy import linkage, fcluster
+from scipy.cluster.hierarchy import linkage, fcluster, dendrogram
 from sklearn.decomposition import PCA
 import altair as alt
 from sklearn.cluster import KMeans
@@ -55,6 +55,10 @@ if clustering_algorithm == 'K-Means':
 elif clustering_algorithm == 'Hierarchical':
     method = st.selectbox('Linkage Method:', ['ward', 'complete', 'average', 'single'])
     linkage_matrix = linkage(normalized_data, method=method)
+    plt.figure(figsize=(10, 7))
+    dendrogram(linkage_matrix)
+    plt.title('Hierarchical Clustering Dendrogram')
+    st.pyplot(plt)
     num_clusters = st.slider('Number of Clusters:', 2, 20, 1)
     cluster_labels = fcluster(linkage_matrix, num_clusters, criterion='maxclust')
     df['Cluster'] = cluster_labels
@@ -117,4 +121,42 @@ plt.xlabel('Number of clusters (K)')
 plt.ylabel('WCSS')
 st.pyplot(plt)
 
-st.write('Choose n_clusters = 6 for players, = 10 for goalkeepers')
+st.write('Choose n_clusters = 8 for players, = 10 for goalkeepers')
+
+#Similar_player
+
+st.write('## 3. Similar player finding')
+
+player_name = st.selectbox(
+    "Choose player for finding:",
+    df['name'].unique(),
+    index=None,
+    placeholder="Select player...", 
+)
+st.write("Player you selected:", player_name)
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from scipy.spatial.distance import euclidean
+import plotly.graph_objects as go
+
+if player_name:
+    player_data = df[df['name'] == player_name]
+
+    #normalize
+    scaler = StandardScaler()
+    player_cluster = player_data['Cluster'].iloc[0]
+    st.write(f"{player_name} is in cluster {player_cluster}")
+    cluster_players = df[df['Cluster'] == player_cluster]
+    normalized_df = cluster_players.copy()
+    normalized_df[selected_features] = scaler.fit_transform(cluster_players[selected_features])
+
+    #compute similariry
+
+    target_vector = normalized_df[normalized_df['name'] == player_name][selected_features].iloc[0]
+    normalized_df['Similarity'] = normalized_df[selected_features].apply(
+        lambda x: euclidean(target_vector, x), axis=1)
+
+    similar_players = normalized_df.sort_values(by='Similarity').head(6)
+    similar_players = similar_players[similar_players['name'] != player_name]
+    st.write(f"Top Similar Players to {player_name} using {clustering_algorithm}:")
+    similar_players[['name', 'Pos', 'Similarity']]

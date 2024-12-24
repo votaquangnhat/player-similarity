@@ -76,7 +76,7 @@ if selected_columns:
 selected_columns = df.select_dtypes(include=['number']).columns.to_list()
 corr = df[selected_columns].corr()
 threshold = st.number_input(
-"Insert a number", value=0.8, placeholder="Enter the threshold...")
+"Insert a number", value=0.9, placeholder="Enter the threshold...")
 st.write("The current threshold is ", threshold)
 attribute = st.selectbox('Select an attribute for check correlation:',
                       df.select_dtypes(include='number').columns,
@@ -109,11 +109,11 @@ dropped_columns
 # high_corr_pairs
 
 
-selected_columns_pp = st.multiselect("Select columns to pairplot:",
-                                  df.select_dtypes(include=['number']).columns.to_list(),
-                                  default=['Summary_Gls', 'Summary_xG'])
+# selected_columns_pp = st.multiselect("Select columns to pairplot:",
+#                                   df.select_dtypes(include=['number']).columns.to_list(),
+#                                   default=['Summary_Gls', 'Summary_xG'])
 
-if selected_columns_pp:
-    sns.pairplot(df[selected_columns_pp])
-    fig = plt.gcf()
-    st.pyplot(fig)
+# if selected_columns_pp:
+#     sns.pairplot(df[selected_columns_pp])
+#     fig = plt.gcf()
+#     st.pyplot(fig)
